@@ -7,10 +7,10 @@ const R = require('ramda')
 const Nomad = require('nomad-stream')
 
 const serverPort = 9000
-const nomadID = 'QmNQ6KmqLf8B9NxEcfow3Nzk4Ny2qEiDW1gYPw55335Xxx'
+const nomadID = 'QmeU5AkheBYAyet3SdCLG9BmVU3sE7r6wYdX51zxaZdjec'
 const nomad = new Nomad()
 
-let latestMessage = {}
+let latestMessage = {key: 'value'}
 
 function requestHandler(req, res) {
   res.setHeader('Content-Type', 'application/json')

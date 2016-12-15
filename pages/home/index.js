@@ -25,51 +25,39 @@ class CarSpot extends Component {
 class HomePage extends Component {
   constructor(props) {
     super(props)
-    this.state = {ships: 'no ships yet'}
+    this.state = {state: [
+      { available: true, price: ''},
+      { available: true, price: ''}
+    ]}
   }
 
   componentDidMount() {
     const _this = this
     setInterval(() => {
-      _this.updateShipState()
+      _this.updateState()
     }, 5000)
   }
 
-  updateShipState() {
+  updateState() {
     let _this = this
     fetch('http://localhost:9000').then(res => {
       return res.json()
     }).then(json => {
-
-      const withinViewport = (lat, lon) => {
-        return lat > boundingBox[0][0] &&
-          lat < boundingBox[1][0] &&
-          lon > boundingBox[0][1] &&
-          lon < boundingBox[1][1]
-      }
-
-      const normalize = (num) => {
-        const min = boundingBox[0][0]
-        const max = boundingBox[1][0]
-        return (num - min) / (max - min)
-      }
-
-      const generateResult = (data) => {
-        if (data.lat && data.lon) {
-          if (withinViewport(data.lat, data.lon)) {
-            boatCache[data.mmsi] = data
-            boatCache[data.mmsi].viewX = normalize(data.lat)
-          } else {
-            delete boatCache[data.mmsi]
-          }
+      // const state = [
+      //   {available: true, price: 1},
+      //   {available: false, price: 2},
+      // ]
+      const parsed = JSON.parse(json)
+      const state = R.map(value => {
+        return {
+          available: value['charging_station']['data'] !== 'occupied',
+          price: value['charging_station']['price']
         }
-        return boatCache
-      }
+      }, R.values(parsed))
 
-      const shipsJSON = JSON.parse(json)
-      const ships = generateResult(shipsJSON)
-      console.log(ships)
-      _this.setState({ships})
+      debugger
+
+      _this.setState({state: state})
 
     }).catch(err => {
       console.log(err)
@@ -77,10 +65,12 @@ class HomePage extends Component {
   }
 
   render() {
+    const price0 = (this.state.state[0].price)? `$${this.state.state[0].price}` : ''
+    const price1 = (this.state.state[1].price)? `$${this.state.state[1].price}` : ''
     return (
       <div>
-        <CarSpot price="$10" left="100" top="100" isFree={true} />
-        <CarSpot price="$8" left="600" top="100" isFree={false} />
+        <CarSpot price={price0} left="100" top="100" isFree={this.state.state[0].available} />
+        <CarSpot price={price1} left="600" top="100" isFree={this.state.state[1].available} />
       </div>
     )
   }
