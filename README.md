@@ -6,7 +6,8 @@ To run it first clone this repo.
 `npm install`
 
 Start these in different terminal windows
- `ipfs daemon`
+ 
+`ipfs daemon`
 
 `node server/server.js`
 
