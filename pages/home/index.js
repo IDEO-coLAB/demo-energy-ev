@@ -16,6 +16,7 @@ class CarSpot extends Component {
         <div>
           <div className={theClass} style={{left: left, top: top}}>
             <div style={{left: '50px', top: '300px'}} className={s.label}>{this.props.price}</div>
+            <div style={{left: '50px', top: '450px'}} className={s.timeLabel}>{this.props.chargeTime}</div>
           </div>
         </div>
       )
@@ -51,7 +52,8 @@ class HomePage extends Component {
       const state = R.map(value => {
         return {
           available: value['charging_station']['data'] !== 'occupied',
-          price: value['charging_station']['price']
+          price: value['charging_station']['price'],
+          timeCharging: value['charging_station']['timeCharging']
         }
       }, R.values(parsed))
 
@@ -67,10 +69,12 @@ class HomePage extends Component {
   render() {
     const price0 = (this.state.state[0].price)? `$${this.state.state[0].price}` : ''
     const price1 = (this.state.state[1].price)? `$${this.state.state[1].price}` : ''
+    const chargeTime0 = (this.state.state[0].timeCharging)? `Been charging for ${this.state.state[0].timeCharging.substring(0,6)} minutes` : ''
+    const chargeTime1 = (this.state.state[1].timeCharging)? `Been charging for ${this.state.state[1].timeCharging.substring(0,6)} minutes` : ''
     return (
       <div>
-        <CarSpot price={price0} left="100" top="100" isFree={this.state.state[0].available} />
-        <CarSpot price={price1} left="600" top="100" isFree={this.state.state[1].available} />
+        <CarSpot price={price0} left="100" top="100" isFree={this.state.state[0].available} chargeTime={chargeTime0} />
+        <CarSpot price={price1} left="600" top="100" isFree={this.state.state[1].available} chargeTime={chargeTime1} />
       </div>
     )
   }

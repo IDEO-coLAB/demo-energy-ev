@@ -38,4 +38,8 @@ file) using composes keyword */
 	font-family: 'noto-sans';
 }
 
-
+.timeLabel {
+	position: absolute;
+	font-size: 30px;
+	font-family: 'noto-sans';
+}
