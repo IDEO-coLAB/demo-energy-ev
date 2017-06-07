@@ -1,5 +1,5 @@
 # demo-energy-ev
-Demo showing EV charging station availability, pricing, and time charged
+Demo showing EV charging station availability, pricing, and time charged. From fall 2016 energy sprint.
 
 To run it first clone this repo.
 
